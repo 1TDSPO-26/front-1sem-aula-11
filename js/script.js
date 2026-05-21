@@ -4,11 +4,11 @@
 //   email: "zezinho@gmail.com",
 //   senha: "123456",
 // };
- 
+
 // //Criando uma lista de objetos para comparar com os dados do formulário:
 // const arrayDeCoisas = ["Saab", "Volvo", "BMW", 1, null, {nome:"Ale",idade:50}];
 // console.log(arrayDeCoisas);
- 
+
 // console.log(arrayDeCoisas[0]);
 // console.log(arrayDeCoisas[1]);
 // console.log(arrayDeCoisas[2]);
@@ -17,15 +17,15 @@
 // console.log(arrayDeCoisas[5]);
 // console.log(arrayDeCoisas[5].nome);
 // console.log(arrayDeCoisas[5].idade);
- 
+
 // //Imprimindo um objeto
 // console.log(usuario);
 // console.log(usuario.nome);
 // console.log(usuario.email);
 // console.log(usuario.senha);
- 
+
 //lista de usuários:
- 
+
 const usuarios = [
   {
     nome: "Zezinho",
@@ -75,55 +75,75 @@ const usuarios = [
   {
     nome: "Fernanda",
     email: "fernanda@gmail.com",
-    senha: "12345",
+    senha: "fer0987",
   },
 ];
- 
+
 //Recuperando o botão entrar
 // const botaoEntrar = document.getElementById("btnEntrar");
- 
+
 const botaoEntrar = document.querySelector("button[type='submit']");
- 
+
 //Atrelar ao botão um evento
 //Vamos utilizar uma função que escuta eventos.
 //Essa função se chama addEventListener(param1, param2) e recebe dois parâmetros:
 //O primeiro é o evento em si (click ou outro qualquer).
 //O segundo é a função, que pode ser uma função anônima ou uma função declarada.
 //Que será executada quando esse evento acontecer.
- 
+
 //Ex: botaoEntrar.addEventListener("click", function(){ Coisas aqui dentro da função para serem executadas quando o botão for clicado. });
- 
-botaoEntrar.addEventListener("click", (evento)=> {
- 
+
+botaoEntrar.addEventListener("click", function (evento) {
   evento.preventDefault();
- 
+
   try {
-    //Recuperando os 2 campos do formulário de login e adicionando em um objeto:
+    //Recuperando os 2 campos do formulário de login e imprimir no console:
     const email = document.getElementById("idEmail");
     const senha = document.getElementById("idSenha");
- 
-    //Criar o objeto dadosForm:
-    const dadosForm = {
-      email: email.value,
-      senha: senha.value,
-    };
- 
+
+    //Imprimindo o valor dos campos em tela.
+    console.log(email.value);
+    console.log(senha.value);
+
     if (usuarios) {
-     
+      
       for (let x = 0; x < usuarios.length; x++) {
-       
-        if ((dadosForm.email === usuarios[x].email) && (dadosForm.senha === usuarios[x].senha)) {
-          alert("Login realizado com sucesso!");      
-          window.location.href = "../index.html";
-          isValid = true;
-          break;
+        
+        if ((email.value === usuarios[x].email) && (senha.value === usuarios[x].senha)) {
+          alert("Login realizado com sucesso!");    
+          
+                   //Criando um contador para o tempo de espera do usuário.
+          let contador = 5;
  
+          //Capturando a divMsg através de seletores css.
+          const divMsg = document.querySelector("#msg");
+          divMsg.innerHTML = `<p>Você será redirecionado em ${contador} segundos!</p>`;
+          divMsg.style.color = "green";
+          divMsg.style.backgroundColor = "#88e388";
+ 
+          const intervalo = setInterval( ()=>{
+ 
+            //decrementando o contador
+            contador--;
+            divMsg.innerHTML = `<p>Você será redirecionado em ${contador} segundos!</p>`;
+            divMsg.style.color = "green";
+            divMsg.style.backgroundColor = "#88e388";
+           
+            //Verificando se o contador chegou
+            if(contador === 0){
+              clearInterval(intervalo);
+              window.location.href = "../index.html";
+            }
+ 
+          }, 1000);
+
+          // window.location.href = "../index.html";
+          return usuarios[x];
         } 
+
       }
- 
-      if (!isValid) {
-        throw new Error("Email ou senha incorretos!");
-      }
+
+      throw new Error("Nome de usuário ou senha incorretos!");
 
     } else {
       throw new Error("Preencha os campos corretamente!");
