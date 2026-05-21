@@ -30,52 +30,52 @@ const usuarios = [
   {
     nome: "Zezinho",
     email: "zezinho@gmail.com",
-    senha: "123456",
+    senha: "12345",
   },
   {
     nome: "Mariana",
     email: "mariana@gmail.com",
-    senha: "abc123",
+    senha: "12345",
   },
   {
     nome: "Rafael",
     email: "rafael@gmail.com",
-    senha: "senha789",
+    senha: "12345",
   },
   {
     nome: "Beatriz",
     email: "beatriz@gmail.com",
-    senha: "bia2024",
+    senha: "12345",
   },
   {
     nome: "Lucas",
     email: "lucas@gmail.com",
-    senha: "lucas321",
+    senha: "12345",
   },
   {
     nome: "Camila",
     email: "camila@gmail.com",
-    senha: "cami456",
+    senha: "12345",
   },
   {
     nome: "Thiago",
     email: "thiago@gmail.com",
-    senha: "thi987",
+    senha: "12345",
   },
   {
     nome: "Juliana",
     email: "juliana@gmail.com",
-    senha: "ju12345",
+    senha: "12345",
   },
   {
     nome: "Bruno",
     email: "bruno@gmail.com",
-    senha: "bru2025",
+    senha: "12345",
   },
   {
     nome: "Fernanda",
     email: "fernanda@gmail.com",
-    senha: "fer0987",
+    senha: "12345",
   },
 ];
 
@@ -110,14 +110,41 @@ botaoEntrar.addEventListener("click", function (evento) {
       for (let x = 0; x < usuarios.length; x++) {
         
         if ((email.value === usuarios[x].email) && (senha.value === usuarios[x].senha)) {
-          alert("Login realizado com sucesso!");      
-          window.location.href = "../index.html";
-        } else {
-          throw new Error("Nome de usuário ou senha incorretos!");
+          alert("Login realizado com sucesso!"); 
+          
+          //Criando um contador para o tempo de espera do usuário.
+          let contador = 5;
+
+          //Capturando a divMsg através de seletores css.
+          const divMsg = document.querySelector("#msg");
+          divMsg.innerHTML = `<p>Você será redirecionado em ${contador} segundos!</p>`;
+          divMsg.style.color = "green";
+          divMsg.style.backgroundColor = "#88e388";
+
+          const intervalo = setInterval( ()=>{
+
+            //decrementando o contador
+            contador--;
+            divMsg.innerHTML = `<p>Você será redirecionado em ${contador} segundos!</p>`;
+            divMsg.style.color = "green";
+            divMsg.style.backgroundColor = "#88e388";
+            
+            //Verificando se o contador chegou
+            if(contador === 0){
+              clearInterval(intervalo);
+              window.location.href = "../index.html";
+            }
+
+          }, 1000);
+
+          
+          // window.location.href = "../index.html";
+          return usuarios[x];
         }
-
       }
-
+      //Lançamento de uma Msg em forma de erro caso o login não seja realizado.
+      throw new Error("Nome de usuário ou senha incorretos!");
+      
     } else {
       throw new Error("Preencha os campos corretamente!");
     }

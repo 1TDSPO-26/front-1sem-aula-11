@@ -1,5 +1,5 @@
 .form__input:valid:not(:placeholder-shown) {
-    border: 2px solid green;
+    border: 2px solid #88e388;
 }
 
 .form__input:invalid:not(:placeholder-shown) {
