@@ -40,37 +40,37 @@ const usuarios = [
   {
     nome: "Rafael",
     email: "rafael@gmail.com",
-    senha: "senha789",
+    senha: "12345",
   },
   {
     nome: "Beatriz",
     email: "beatriz@gmail.com",
-    senha: "bia2024",
+    senha: "12345",
   },
   {
     nome: "Lucas",
     email: "lucas@gmail.com",
-    senha: "lucas321",
+    senha: "12345",
   },
   {
     nome: "Camila",
     email: "camila@gmail.com",
-    senha: "cami456",
+    senha: "12345",
   },
   {
     nome: "Thiago",
     email: "thiago@gmail.com",
-    senha: "thi987",
+    senha: "12345",
   },
   {
     nome: "Juliana",
     email: "juliana@gmail.com",
-    senha: "ju12345",
+    senha: "12345",
   },
   {
     nome: "Bruno",
     email: "bruno@gmail.com",
-    senha: "bru2025",
+    senha: "12345",
   },
   {
     nome: "Fernanda",
@@ -93,68 +93,62 @@ const botaoEntrar = document.querySelector("button[type='submit']");
 
 //Ex: botaoEntrar.addEventListener("click", function(){ Coisas aqui dentro da função para serem executadas quando o botão for clicado. });
 
-botaoEntrar.addEventListener("click", (evento) => {
+botaoEntrar.addEventListener("click", function (evento) {
   evento.preventDefault();
 
   try {
-    //Recuperando os 2 campos do formulário de login e adicionando em um objeto:
+    //Recuperando os 2 campos do formulário de login e imprimir no console:
     const email = document.getElementById("idEmail");
     const senha = document.getElementById("idSenha");
 
-    //Criar o objeto dadosForm:
-    const dadosForm = {
-      email: email.value,
-      senha: senha.value,
-    };
-
-    let isValid = false;
+    //Imprimindo o valor dos campos em tela.
+    console.log(email.value);
+    console.log(senha.value);
 
     if (usuarios) {
+      
       for (let x = 0; x < usuarios.length; x++) {
-        if (dadosForm.email === usuarios[x].email && dadosForm.senha === usuarios[x].senha) {
-            
-          const modal = document.getElementById("meuModal");
-          modal.showModal();
-
-          const botaoFecharModal = document.getElementById("fecharModal");
-          botaoFecharModal.addEventListener("click", ()=>{
-            modal.close();
-          });
-
-          const divMsg = document.getElementById("msg");
-          divMsg.innerHTML = "<h2>Login realizado com sucesso!</h2><p>Você será redirecionado em 5 segundos...</p>";
-
+        
+        if ((email.value === usuarios[x].email) && (senha.value === usuarios[x].senha)) {
+          alert("Login realizado com sucesso!"); 
+          
+          //Criando um contador para o tempo de espera do usuário.
           let contador = 5;
 
+          //Capturando a divMsg através de seletores css.
+          const divMsg = document.querySelector("#msg");
+          divMsg.innerHTML = `<p>Você será redirecionado em ${contador} segundos!</p>`;
+          divMsg.style.color = "green";
+          divMsg.style.backgroundColor = "#88e388";
+
           const intervalo = setInterval( ()=>{
+
+            //decrementando o contador
             contador--;
-            divMsg.innerHTML = `<h2>Login realizado com sucesso!</h2><p>Você será redirecionado em ${contador} segundos...</p>`;
+            divMsg.innerHTML = `<p>Você será redirecionado em ${contador} segundos!</p>`;
+            divMsg.style.color = "green";
+            divMsg.style.backgroundColor = "#88e388";
             
-            if (contador === 0) {
+            //Verificando se o contador chegou
+            if(contador === 0){
               clearInterval(intervalo);
               window.location.href = "../index.html";
             }
 
-          },1000);
+          }, 1000);
 
-          isValid = true;
-          break;
+          
+          // window.location.href = "../index.html";
+          return usuarios[x];
         }
       }
-
-      if (!isValid) {
-        throw new Error("Email ou senha incorretos!");
-      }
-
+      //Lançamento de uma Msg em forma de erro caso o login não seja realizado.
+      throw new Error("Nome de usuário ou senha incorretos!");
+      
     } else {
       throw new Error("Preencha os campos corretamente!");
     }
   } catch (error) {
     alert(error.message);
   }
-
-
 });
-
-
-//Tentem reaproveitar a MSG do MODAL e apliquem na msg de ERRO
