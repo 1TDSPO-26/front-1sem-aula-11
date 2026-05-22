@@ -21,6 +21,7 @@
 */
 
 :root{
+    scroll-behavior: smooth;
     /* Cores de Fundo e Identidade */
     --bg-dark:#1a1b1c;  /* Fundo quase preto */
     --bg-dark-med:#4f5357;  /* Fundo quase preto */

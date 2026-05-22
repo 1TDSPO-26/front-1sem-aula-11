@@ -26,58 +26,58 @@
 
 //lista de usuários:
 
-const usuarios = [
-  {
-    nome: "Zezinho",
-    email: "zezinho@gmail.com",
-    senha: "12345",
-  },
-  {
-    nome: "Mariana",
-    email: "mariana@gmail.com",
-    senha: "12345",
-  },
-  {
-    nome: "Rafael",
-    email: "rafael@gmail.com",
-    senha: "12345",
-  },
-  {
-    nome: "Beatriz",
-    email: "beatriz@gmail.com",
-    senha: "12345",
-  },
-  {
-    nome: "Lucas",
-    email: "lucas@gmail.com",
-    senha: "12345",
-  },
-  {
-    nome: "Camila",
-    email: "camila@gmail.com",
-    senha: "12345",
-  },
-  {
-    nome: "Thiago",
-    email: "thiago@gmail.com",
-    senha: "12345",
-  },
-  {
-    nome: "Juliana",
-    email: "juliana@gmail.com",
-    senha: "12345",
-  },
-  {
-    nome: "Bruno",
-    email: "bruno@gmail.com",
-    senha: "12345",
-  },
-  {
-    nome: "Fernanda",
-    email: "fernanda@gmail.com",
-    senha: "12345",
-  },
-];
+// const usuarios = [
+//   {
+//     nome: "Zezinho",
+//     email: "zezinho@gmail.com",
+//     senha: "12345",
+//   },
+//   {
+//     nome: "Mariana",
+//     email: "mariana@gmail.com",
+//     senha: "12345",
+//   },
+//   {
+//     nome: "Rafael",
+//     email: "rafael@gmail.com",
+//     senha: "12345",
+//   },
+//   {
+//     nome: "Beatriz",
+//     email: "beatriz@gmail.com",
+//     senha: "12345",
+//   },
+//   {
+//     nome: "Lucas",
+//     email: "lucas@gmail.com",
+//     senha: "12345",
+//   },
+//   {
+//     nome: "Camila",
+//     email: "camila@gmail.com",
+//     senha: "12345",
+//   },
+//   {
+//     nome: "Thiago",
+//     email: "thiago@gmail.com",
+//     senha: "12345",
+//   },
+//   {
+//     nome: "Juliana",
+//     email: "juliana@gmail.com",
+//     senha: "12345",
+//   },
+//   {
+//     nome: "Bruno",
+//     email: "bruno@gmail.com",
+//     senha: "12345",
+//   },
+//   {
+//     nome: "Fernanda",
+//     email: "fernanda@gmail.com",
+//     senha: "12345",
+//   },
+// ];
 
 //Recuperando o botão entrar
 // const botaoEntrar = document.getElementById("btnEntrar");
@@ -97,6 +97,9 @@ botaoEntrar.addEventListener("click", function (evento) {
   evento.preventDefault();
 
   try {
+    //Variável de controle
+    let isValid = false;
+
     //Recuperando os 2 campos do formulário de login e imprimir no console:
     const email = document.getElementById("idEmail");
     const senha = document.getElementById("idSenha");
@@ -105,50 +108,64 @@ botaoEntrar.addEventListener("click", function (evento) {
     console.log(email.value);
     console.log(senha.value);
 
-    if (usuarios) {
-      
-      for (let x = 0; x < usuarios.length; x++) {
-        
-        if ((email.value === usuarios[x].email) && (senha.value === usuarios[x].senha)) {
-          alert("Login realizado com sucesso!"); 
-          
-          //Criando um contador para o tempo de espera do usuário.
-          let contador = 5;
+    let usuarios = [];
 
-          //Capturando a divMsg através de seletores css.
-          const divMsg = document.querySelector("#msg");
-          divMsg.innerHTML = `<p>Você será redirecionado em ${contador} segundos!</p>`;
-          divMsg.style.color = "green";
-          divMsg.style.backgroundColor = "#88e388";
+    fetch("http://localhost:3000/alunos")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        usuarios = data;
+        console.log(usuarios);
 
-          const intervalo = setInterval( ()=>{
-
-            //decrementando o contador
-            contador--;
-            divMsg.innerHTML = `<p>Você será redirecionado em ${contador} segundos!</p>`;
-            divMsg.style.color = "green";
-            divMsg.style.backgroundColor = "#88e388";
+        if (usuarios.length > 0) {
+          for (let x = 0; x < usuarios.length; x++) {
+            if (
+              email.value === usuarios[x].email &&
+              senha.value === usuarios[x].senha) {
+             
+            //Setando a variável de controle como true
+            isValid = true;
             
-            //Verificando se o contador chegou
-            if(contador === 0){
-              clearInterval(intervalo);
-              window.location.href = "../index.html";
+              //Criando um contador para o tempo de espera do usuário.
+              let contador = 5;
+
+              //Capturando a divMsg através de seletores css.
+              const divMsg = document.querySelector("#msg");
+              divMsg.innerHTML = `<p>Você será redirecionado em ${contador} segundos!</p>`;
+              divMsg.style.color = "green";
+              divMsg.style.backgroundColor = "#88e388";
+
+              const intervalo = setInterval(() => {
+                //decrementando o contador
+                contador--;
+                divMsg.innerHTML = `<p>Você será redirecionado em ${contador} segundos!</p>`;
+                divMsg.style.color = "green";
+                divMsg.style.backgroundColor = "#88e388";
+
+                //Verificando se o contador chegou a zero
+                if (contador === 0) {
+                  clearInterval(intervalo);
+                  window.location.href = "../index.html";
+                  return usuarios[x];
+                }
+              }, 1000);
             }
+          }
 
-          }, 1000);
+          if (!isValid) {
+            throw new Error("Email ou senha incorretos!");
+          }
 
-          
-          // window.location.href = "../index.html";
-          return usuarios[x];
+        } else {
+          throw new Error("Preencha os campos corretamente!");
         }
-      }
-      //Lançamento de uma Msg em forma de erro caso o login não seja realizado.
-      throw new Error("Nome de usuário ou senha incorretos!");
+
+      });
       
-    } else {
-      throw new Error("Preencha os campos corretamente!");
+
+    } catch (error) {
+      alert(error.message);
     }
-  } catch (error) {
-    alert(error.message);
-  }
+    
 });
